@@ -1,15 +1,21 @@
 function _ghFzf() {
   subcommand="$1"
   shift
+  set -o pipefail
   command gh "$subcommand" list "$@" \
     | command fzf --preview "command echo {} \
-                        | command grep -oE '^\S+' \
-                        | command xargs gh '$subcommand' view" \
+                               | command grep -oE '^\S+' \
+                               | command xargs gh '$subcommand' view" \
     | command grep -oE '^\S+'
 }
 
 function _ghFzfView() {
-  command gh "$1" view --web "$( _ghFzf "$@" )"
+  local choice="$( _ghFzf "$@" )"
+  if [[ $choice == "" ]]; then
+    echo "No $1 has chosen to view."
+    return 1
+  fi
+  command gh "$1" view --web "$choice"
 }
 
 function _ghWrapper() {
@@ -39,3 +45,4 @@ function ghf() {
 
   command gh "$@"
 }
+  
