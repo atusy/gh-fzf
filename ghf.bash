@@ -1,12 +1,15 @@
 function _ghFzf() {
   subcommand="$1"
   shift
-  set -o pipefail
-  command gh "$subcommand" list "$@" \
-    | command fzf --preview "command echo {} \
-                               | command grep -oE '^\S+' \
-                               | command xargs gh '$subcommand' view" \
-    | command grep -oE '^\S+'
+  local choice="$(
+    set -o pipefail
+    command gh "$subcommand" list "$@" \
+      | command fzf --preview "command echo {} \
+                                 | command grep -oE '^\S+' \
+                                 | command xargs gh '$subcommand' view" \
+      | command grep -oE '^\S+'
+  )"
+  command echo "$choice"
 }
 
 function _ghFzfView() {
