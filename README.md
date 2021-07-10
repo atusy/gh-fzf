@@ -4,6 +4,9 @@
 
 `ghf` = `gh` + `fzf`
 
+![demo of `ghf repo --public`](demo.gif)
+
+
 ## Features
 
 1. Major subcommands gain `fzf` subsubcommand, which finds a topic of your interest.
