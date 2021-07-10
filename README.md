@@ -8,11 +8,13 @@
 
 1. Major subcommands gain `fzf` subsubcommand, which finds a topic of your interest.
    The return is the identifier (e.g., repository name), and can be piped to `ghf` or `gh`.
+   Note that the `fzf` subsubcommand accepts the same arguments as `list` does.
     ```bash
-    ghf repo fzf | ghf repo clone
+    ghf repo fzf | ghf repo clone  # Clone one of your repositories
+    ghf repo fzf atusy | ghf repo clone  # Clone one of atusy's repositores
     ```
 2. Major subcommands runs `fzf` subsubcommand by default instead of `--help` in `gh`.
-   They then pipe the result to view on the web.
+   The result is internally piped to view the page on the web.
     ```bash
     # These are equivalent
     ghf issue
