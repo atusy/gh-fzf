@@ -1,51 +1,80 @@
-function _ghFzf() {
-  subcommand="$1"
-  shift
-  local choice="$(
+function _ghfFzf() {
+  local COMMAND="$1"
+  local SUBCOMMAND="$2"
+  shift 2
+
+  # Try list candidates
+  local STDERR="$( mktemp )"
+  local CANDIDATES="$( "$COMMAND" "$SUBCOMMAND" list "$@" 2> "$STDERR" )"
+  if [[ ! "$( command cat "$STDERR" )" == "" ]]; then
+    "$COMMAND" "$SUBCOMMAND" list "$@"
+    return $?
+  fi
+
+  # Choose one with fzf
+  local CHOICE="$(
     set -o pipefail
-    command gh "$subcommand" list "$@" \
+    command echo "$CANDIDATES" \
       | command fzf --preview "command echo {} \
                                  | command grep -oE '^\S+' \
-                                 | command xargs gh '$subcommand' view" \
+                                 | command xargs '$COMMAND' '$SUBCOMMAND' view" \
       | command grep -oE '^\S+'
   )"
-  command echo "$choice"
+
+  command echo "$CHOICE"
 }
 
-function _ghFzfView() {
-  local choice="$( _ghFzf "$@" )"
-  if [[ $choice == "" ]]; then
-    echo "No $1 has chosen to view."
+function _ghfFzfView() {
+  local CHOICE="$( _ghfFzf "$@" )"
+  if [[ $CHOICE == "" ]]; then
+    echo "No $2 has chosen to view."
     return 1
   fi
-  command gh "$1" view --web "$choice"
+
+  # run e.g. gh issue view 1 --web
+  "$1" "$2" view --web "$CHOICE"
 }
 
-function _ghWrapper() {
+function _ghfWrapper() {
+  local COMMAND="$1"
+  shift
   if [[ "$2" == "fzf" ]]; then
-    local subcommand="$1"
+    local SUBCOMMAND="$1"
     shift 2
-    _ghFzf "$subcommand" "$@"
+    _ghfFzf "$COMMAND" "$SUBCOMMAND" "$@"
   elif [[ "$2" == "--help" ]] || [[ "$2" =~ ^[^-] ]] ; then
-    command gh "$@"
+    "$COMMAND" "$@"
   else
-    _ghFzfView "$@"
+    _ghfFzfView "$COMMAND" "$@"
   fi
 }
 
-function ghf() {
+function _ghf() {
+  local COMMAND="$( command -vp "$1" )" # typically `gh`
+  shift
+
   # stdin goes to original gh
   if [ -p /dev/stdin ]; then
-    command gh "$@" "$(command cat -)"
+    COMMAND "$@" "$(command cat -)"
     return $?
   fi
 
-  local listable="gist\nissue\npr\nrelease\nrepo\nactions\nrun\nworkflow"
-  if echo -e "$listable" | command grep -q "^${1}$"; then
-    _ghWrapper "$@"
+  if [[ $# -gt 0 ]] && "$COMMAND" "$1" list --help &> 0; then
+    _ghfWrapper "$COMMAND" "$@"
     return $?
   fi
 
-  command gh "$@"
+  "$COMMAND" "$@"
 }
-  
+
+if command -vp gh > /dev/null; then
+  function ghf() {
+    _ghf gh "$@"
+  }
+fi
+
+if command -vp glab > /dev/null; then
+  function glabf() {
+    _ghf glab "$@"
+  }
+fi
