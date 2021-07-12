@@ -1,22 +1,24 @@
-# `ghf`, GitHub CLI with fuzzy finder.
+# `ghf`, CLI With Fuzzy Finder For GitHub & Friends.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-`ghf` = `gh` + `fzf`
 
 ![demo of `ghf repo --public`](demo.gif)
 
 
 ## Features
 
-1. Major subcommands gain `fzf` subsubcommand, which finds a topic of your interest.
-   The return is the identifier (e.g., repository name), and can be piped to `ghf` or `gh`.
+`ghf` enhances `gh` and `glabf` experimentally enhances `glab`.
+Enhancements are
+
+1. Subcommands gain `fzf` subsubcommand if they have `list` subsubcommand. This helps finding a topic of your interest.
+   The return is the identifier (e.g., repository name), and can be piped for example to `ghf` or `gh`.
    Note that the `fzf` subsubcommand accepts the same arguments as `list` does.
     ```bash
     ghf repo fzf | ghf repo clone  # Clone one of your repositories
     ghf repo fzf atusy | ghf repo clone  # Clone one of atusy's repositores
     ```
-2. Major subcommands runs `fzf` subsubcommand by default instead of `--help` in `gh`.
+
+2. Subcommands with `fzf` subsubcommand runs that subsubcommand by default instead of `--help` in `gh`.
    The result is internally piped to view the page on the web.
     ```bash
     # These are equivalent
@@ -28,7 +30,7 @@
 
 Requirements:
 
-- [gh](https://cli.github.com/)
+- [gh](https://cli.github.com/) or [glab](https://github.com/profclems/glab)
 - [fzf](https://github.com/junegunn/fzf)
 
 ### For `bash` and `bash`-compatible shell users:
@@ -53,7 +55,7 @@ zinit load atusy/gh-fzf
 
 ```bash
 alias gh=ghf
+alias glab=glabf
 ```
 
-would be useful as `ghf` does not conflict with original features of `gh`.
-
+would be useful as enhanced commands do not conflict with original commands.
