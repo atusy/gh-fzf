@@ -59,7 +59,7 @@ function _ghf() {
     return $?
   fi
 
-  if [[ $# -gt 0 ]] && "$COMMAND" "$1" list --help &> 0; then
+  if [[ $# -gt 0 ]] && "$COMMAND" "$1" list --help &> /dev/null; then
     _ghfWrapper "$COMMAND" "$@"
     return $?
   fi
