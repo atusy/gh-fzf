@@ -50,7 +50,7 @@ function _ghfWrapper() {
 }
 
 function _ghf() {
-  local COMMAND="$( command -vp "$1" )" # typically `gh`
+  local COMMAND="$( command -v "$1" )" # typically `gh`
   shift
 
   # stdin goes to original gh
@@ -67,13 +67,13 @@ function _ghf() {
   "$COMMAND" "$@"
 }
 
-if command -vp gh > /dev/null; then
+if command -v gh > /dev/null; then
   function ghf() {
     _ghf gh "$@"
   }
 fi
 
-if command -vp glab > /dev/null; then
+if command -v glab > /dev/null; then
   function glabf() {
     _ghf glab "$@"
   }
