@@ -55,7 +55,7 @@ function _ghf() {
 
   # stdin goes to original gh
   if [ -p /dev/stdin ]; then
-    COMMAND "$@" "$(command cat -)"
+    "$COMMAND" "$@" "$(command cat -)"
     return $?
   fi
 
