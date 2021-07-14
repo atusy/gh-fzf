@@ -56,7 +56,10 @@ function _ghfWrapper() {
 }
 
 function _ghf() {
-  local COMMAND="$( command -v "$1" )" # typically `gh`
+  local COMMAND="$(
+    unalias $1 &> /dev/null
+    command -v "$1"
+  )" # typically `gh`
   shift
 
   # stdin goes to original gh
