@@ -21,6 +21,12 @@ function _ghfFzf() {
       | command grep -oE '^\S+'
   )"
 
+  # Remove MR prefix for glab
+  if [[ "$SUBCOMMAND" == "mr" ]]; then
+    command echo "${CHOICE#\!}"
+    return 0
+  fi
+
   command echo "$CHOICE"
 }
 
