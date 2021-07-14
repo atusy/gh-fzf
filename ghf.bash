@@ -57,7 +57,7 @@ function _ghfWrapper() {
 
 function _ghf() {
   local COMMAND="$(
-    unalias $1 &> /dev/null
+    unalias "$1" &> /dev/null
     command -v "$1"
   )" # typically `gh`
   shift
