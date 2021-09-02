@@ -19,11 +19,15 @@ Enhancements are
     ```
 
 2. Subcommands with `fzf` subsubcommand runs that subsubcommand by default instead of `--help` in `gh`.
-   The result is internally piped to view the page on the web.
+   The result is internally piped to view the page on the web by default.
     ```bash
     # These are equivalent
     ghf issue
     ghf issue fzf | ghf issue view --web
+
+    # Viewer can be web (default), text, id, url, or short_url
+    export _GHF_FZF_VIEWER="url"
+    ghf issue
     ```
 
 ## Installation
