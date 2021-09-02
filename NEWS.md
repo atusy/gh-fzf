@@ -1,3 +1,9 @@
+# gh-fzf v0.2.0 (unreleased)
+
+- Add `_GH_FZF_VIEWER` environmental variable to control viewer.
+  Options are `web` (default), `text`, `id`, `url`, and `short_url`.
+  The `short_url` shortens the url by `git.io` for GitHub and `bitly` for GitLab.
+
 # gh-fzf v0.1.0
 
 - `ghf` and `glabf` extends `gh` and `glab`, respectively.

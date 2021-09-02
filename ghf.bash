@@ -1,3 +1,9 @@
+if [[ "${_GHF_SOURCE_DIR}" == "" ]]; then
+  _GHF_SOURCE_DIR="$( cd "$( dirname "$0" )" && pwd )"
+fi
+source "${_GHF_SOURCE_DIR}/ghf-view-url.bash"
+source "${_GHF_SOURCE_DIR}/bitly.bash"
+
 function _ghfFzf() {
   local COMMAND="$1"
   local SUBCOMMAND="$2"
@@ -37,8 +43,21 @@ function _ghfFzfView() {
     return 1
   fi
 
-  # run e.g. gh issue view 1 --web
-  "$1" "$2" view --web "$CHOICE"
+  case "${_GH_FZF_VIEWER:-web}" in
+    "web" ) # run e.g. gh issue view 1 --web
+            "$1" "$2" view --web "$CHOICE";;
+    "text" ) "$1" "$2" view "$CHOICE";;
+    "id" ) echo "$CHOICE";;
+    "url" ) echo "$( _ghf_view_url "$CHOICE" "$@" )";;
+    "short_url" )
+      local PATH_TOKEN="$( _bitly_path )"
+      if [[ ! -f "$PATH_TOKEN" ]] || \
+         [[ "$(command cat "$PATH_TOKEN" )" == "" ]]
+      then
+        bitly login
+      fi
+      echo "$( _ghf_view_url "$CHOICE" "$@" )";;
+  esac
 }
 
 function _ghfWrapper() {
