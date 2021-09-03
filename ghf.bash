@@ -74,6 +74,27 @@ function _ghfWrapper() {
   fi
 }
 
+function _ghfIsAliasOrExtensions() {
+  PATTERN="^gh-${2}\$"
+  local ALIASES="$(
+    "$1" alias list | command grep -oE "^\S+" | command sed -E -e 's/:$//g'
+  )"
+
+  # https://github.com/cli/cli/blob/029d49f3b38ebd54cd84b23732bb7efabfce4896/internal/config/config_file.go#L78-L90
+  local EXTENSIONS="$(
+    case "$( basename "$1" )" in
+      "gh")
+        command ls "${XDG_DATA_HOME:-$HOME/.local/share}/gh/extensions";;
+      "glab" ) echo "";;
+    esac
+  )"
+  if echo -e "${ALIASES}\n${EXTENSIONS}" | command grep -q "$PATTERN"; then
+    echo true
+  else
+    echo false
+  fi
+}
+
 function _ghf() {
   local COMMAND="$(
     unalias "$1" &> /dev/null
@@ -84,15 +105,15 @@ function _ghf() {
   # stdin goes to original gh
   if [ -p /dev/stdin ]; then
     "$COMMAND" "$@" "$(command cat -)"
-    return $?
-  fi
-
-  if [[ $# -gt 0 ]] && "$COMMAND" "$1" list --help &> /dev/null; then
+  elif [[ $# -eq 0 ]]; then
+    "$COMMAND"
+  elif [[ "$( _ghfIsAliasOrExtensions "$COMMAND" "$@" )" == true ]]; then
+    "$COMMAND" "$@"
+  elif "$COMMAND" "$1" list --help &> /dev/null; then
     _ghfWrapper "$COMMAND" "$@"
-    return $?
+  else
+    "$COMMAND" "$@"
   fi
-
-  "$COMMAND" "$@"
 }
 
 if command -v gh > /dev/null; then
