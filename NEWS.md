@@ -4,7 +4,7 @@
   Options are `web` (default), `text`, `id`, `url`, and `short_url`.
   The `short_url` shortens the url by `git.io` for GitHub and `bitly` for GitLab.
 - Support aliases and extensions. For them, `ghf` and `glabf` do not attempt applying `fzf`
-  unless they do so by themseves.
+  unless they do so by themseves (#5).
 
 # gh-fzf v0.1.0
 
