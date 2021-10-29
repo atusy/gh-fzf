@@ -42,6 +42,11 @@ function _ghfFzfView() {
     echo "No $2 has chosen to view."
     return 1
   fi
+  
+  if ! test -t; then
+    echo "$CHOICE"
+    return $?
+  fi
 
   case "${_GH_FZF_VIEWER:-web}" in
     "web" ) # run e.g. gh issue view 1 --web
