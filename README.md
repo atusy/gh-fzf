@@ -53,6 +53,15 @@ Add below in your `.zshrc`
 zinit load atusy/gh-fzf
 ```
 
+### For `bash`-inconpatible users
+
+If your system has `bash`, then add `gh-fzf/bin` to `PATH`
+
+``` fish
+# For fish shell
+fish_add_path path/to/gh-fzf/bin
+```
+
 ## Tips
 
 ### Alias
@@ -63,12 +72,3 @@ alias glab=glabf
 ```
 
 would be useful as enhanced commands do not conflict with original commands.
-
-### For `bash`-inconpatible users
-
-If your system has `bash`, then add `gh-fzf/bin` to `PATH`
-
-``` fish
-# For fish shell
-fish_add_path path/to/gh-fzf/bin
-```
