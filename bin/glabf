@@ -2,5 +2,5 @@
 set -e
 
 _GHF_SOURCE_DIR="$( cd "$( dirname "$0" )/.." && pwd )"
-. "ghf.bash"
-ghf "$@"
+. "${_GHF_SOURCE_DIR}/ghf.bash"
+glabf "$@"
