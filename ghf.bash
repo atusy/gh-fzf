@@ -39,7 +39,7 @@ function _ghfFzf() {
 function _ghfFzfView() {
   local CHOICE="$( _ghfFzf "$@" )"
   if [[ $CHOICE == "" ]]; then
-    echo "No $2 has chosen to view."
+    echo "No $2 has chosen to view." >&2
     return 1
   fi
   
