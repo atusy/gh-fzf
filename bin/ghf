@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-_GHF_SOURCE_DIR="$( cd "$( dirname "$0" )/.." && pwd )"
+_GHF_SOURCE_DIR=$(cd "$(dirname "$0")/.." && pwd)
 . "${_GHF_SOURCE_DIR}/ghf.bash"
 ghf "$@"
